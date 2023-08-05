@@ -1,6 +1,5 @@
-
-db.sqlite3/*
+.sqlite3/*
 media/Images/*
-logo/*
-Profiles/*
-QRCodes/*
+media/logo/*
+media/Profiles/*
+media/QRCodes/*

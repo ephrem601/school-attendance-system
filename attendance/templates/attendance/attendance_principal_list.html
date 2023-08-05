@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+{% block list %}
+{% if user.is_authenticated %}
+{% with userprofile=user.userprofile %}
+<style>
+    #canvas {
+      width: 400px;
+      margin-top:20px;
+    }
+</style>
+
+<link rel="canonical" href="https://demo-basic.adminkit.io/charts-chartjs.html" />
+  <div class="container-scroller">
+    {% include "navbar.html" %}
+    <div class="container-fluid page-body-wrapper">
+      {% include "sidebar.html" %}
+      <div class="row">
+          <div class="card">
+                <div class="card-body">
+                  <h5 class="text text-secondary"><li> Name: {{user.userprofile.firstname}} {{user.userprofile.fathername}}</li></h5>
+                  <h5 class="text text-secondary"><li> Role: {{user.userprofile.user_type}}</li></h5>
+                  {% if 'Student' in userprofile.user_type %}
+                  <h5 class="text text-secondary"><li> Grade: {{user.userprofile.grade}}</li></h5>
+                  {% endif %}
+                  {% if 'Teacher' in userprofile.user_type %}
+                  <h5 class="text text-secondary"><li> Home Room: {{user.userprofile.home_room}}</li></h5>
+                  {% endif %}
+                  <h5 class="text text-secondary"><li> Phone: {{user.userprofile.phone}}</li></h5>
+                  <h5 class="text text-secondary"><li> Email: {{user.userprofile.email}}</li></h5>
+ 
+                  <p class="card-title mt-5">Principals Attendance List</p>
+                  <a href="#" class="btn btn-secondary mb-4">Print</a>
+                  <a href="#" class="btn btn-success mb-4">Export</a>
+                    <div class="table-responsive">
+                        <table id="" class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="table-success">
+                                <th>Home Room</th>
+                                <th>First Name</th>
+                                <th>Father Name</th>
+                                <th>Attended Date</th>
+                                <th>Phone</th>
+                                <th>Role</th>
+                                <th>Profile Picture</th>
+                                <th>QR Code</th>
+                            </tr>
+                        </thead>   
+                        <tbody>
+                          {% for attendance in attendance_list %}
+                            {% if 'Principal' in attendance.attended_user.user_type %}
+                            <tr> 
+                                <td> 
+                                  {% for registered_by in attendance.registered_by.all %}
+                                      {{ registered_by.firstname }}
+                                  {% endfor %}
+                                </td>
+                                <td>{{ attendance.attended_user.firstname }}</td>
+                                <td>{{ attendance.attended_user.fathername}}</td>
+                                <td>{{ attendance.attended_date }}</td>
+                                    <td>{{attendance.attended_user.phone}}  </td>
+                                    <td>{{attendance.attended_user.user_type}}</td>
+                                    <td ><img src="{{attendance.attended_user.profile_image.url }}"  height="300" width="300"></td>
+                                <td >
+                                  <a href="{{ attendance.attended_user.qr_code.url }}">
+                                    <img src="{{ attendance.attended_user.qr_code.url }}"  height="300" width="300">
+                                  </a>
+                                </td> 
+                            </tr> 
+                            {% endif %}
+                          {% endfor %} 
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endwith %}
+  {% else %}
+      <p>You need to log in to view this page.</p>
+  {% endif %}
+{% endblock %}

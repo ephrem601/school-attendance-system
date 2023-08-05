@@ -1,0 +1,123 @@
+<!-- partial:partials/_sidebar.html -->
+ 
+
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+     <div class="input-group mb-3">
+           <img src="{{user.userprofile.profile_image.url}}" alt="Profile Picture" class="rounded-circle ml-5"  height="100" width="100">
+     
+     </div>
+    <h5 class="text text-primary ml-4 font-weight-bold"><i class="mdi mdi-key"></i>&nbsp; Logged in as&nbsp;{{user.userprofile.firstname}}</h5>
+    <h5 class="text text-secondary ml-4 font-weight-bold"><i class="mdi mdi-school"></i>&nbsp; Role&nbsp;{{user.userprofile.user_type}}</h5>
+    <hr>
+<ul class="nav">
+       
+    {% if 'Principal' in userprofile.user_type %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'attendance:dashboard' %}">
+            <i class="mdi mdi-home menu-icon"></i>
+            <span class="menu-title">Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#ui1" aria-expanded="false" aria-controls="ui-basic">
+            <i class="mdi mdi-grid menu-icon"></i>
+            <span class="menu-title">Profile</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui1">
+            <ul class="list-unstyled sub-menu">
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:principal' %}">&nbsp;&nbsp; Principal</a></li>
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:teacher' %}">&nbsp;&nbsp; Teachers</a></li>
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:student' %}">&nbsp;&nbsp; Students</a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#ui2" aria-expanded="false" aria-controls="ui-basic">
+            <i class="mdi mdi-grid menu-icon"></i>
+            <span class="menu-title">Attendance List</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui2">
+            <ul class="list-unstyled sub-menu">
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:principal-attendance' %}">&nbsp;&nbsp; Principal</a></li>
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:teacher-attendance' %}">&nbsp;&nbsp; Teachers</a></li>
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:student-attendance' %}">&nbsp;&nbsp; Students</a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'qreader:qr-data' %}">
+            <i class="mdi mdi-camera menu-icon"></i>
+            <span class="menu-title">Taking Attendance</span>
+        </a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:registration' %}" >
+        <i class="mdi mdi-account menu-icon"></i>
+        <span class="menu-title">Registration</span>
+    </a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="documentation/documentation.html">
+        <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+        <span class="menu-title">Documentation</span>
+    </a>
+    </li>
+    {% elif 'Teacher' in userprofile.user_type %}
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#ui1" aria-expanded="false" aria-controls="ui-basic">
+            <i class="mdi mdi-grid menu-icon"></i>
+            <span class="menu-title">Profile</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui1">
+            <ul class="list-unstyled sub-menu">
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:student' %}">&nbsp;&nbsp; Students</a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#ui2" aria-expanded="false" aria-controls="ui-basic">
+            <i class="mdi mdi-grid menu-icon"></i>
+            <span class="menu-title">Attendance List</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui2">
+            <ul class="list-unstyled sub-menu">
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:teacher-attendance' %}">&nbsp;&nbsp; Teachers</a></li>
+                <li class="nav-item ml-3"><a class="nav-link mdi mdi-grid-large" href="{% url 'attendance:student-attendance' %}">&nbsp;&nbsp; Students</a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'qreader:qr-data' %}">
+            <i class="mdi mdi-grid-large menu-icon"></i>
+            <span class="menu-title">Taking Attendance</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'accounts:registration' %}" >
+            <i class="mdi mdi-account menu-icon"></i>
+            <span class="menu-title">Registration</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="documentation/documentation.html">
+            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+            <span class="menu-title">Documentation</span>
+        </a>
+        </li>
+        {% elif 'Student' in userprofile.user_type %}
+        <li class="nav-item">
+            <a class="nav-link" href="documentation/documentation.html">
+                <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                <span class="menu-title">Documentation</span>
+            </a>
+        </li>
+</ul>
+{% endif %}
+</nav>
+
+<!-- partial -->
+ 

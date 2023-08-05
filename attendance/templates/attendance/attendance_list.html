@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% load static %}
+{% block list %}
+
+<style>
+    #canvas {
+      width: 400px;
+      margin-top:20px;
+    }
+</style>
+
+<link rel="canonical" href="https://demo-basic.adminkit.io/charts-chartjs.html" />
+  <div class="container-scroller">
+    {% include "navbar.html" %}
+    <div class="container-fluid page-body-wrapper">
+      {% include "sidebar.html" %}
+      <div class="row">
+          <div class="card">
+            <div class="row">
+              <!-- Doughnut Chart -->
+            <div class="col-sm-4">
+              <div id="canvas" class="chart">
+                <canvas id="chartjs-doughnut"></canvas>
+              </div>
+            </div>
+            <!-- Pie Chart  -->
+            <div class="col-sm-4">
+              <div id="canvas" class="chart">
+                <canvas id="chartjs-pie"></canvas>
+              </div>
+            </div>
+            <!-- Line Chart -->
+            <div class="col-sm-4">
+              <div id="canvas" class="chart">
+                <canvas id="chartjs-line"></canvas>
+              </div>
+            </div>
+          </div>
+          <hr>
+            <!-- Douhnut Chart  -->
+                <div class="card-body">
+                  <p>Principals</p>
+                    <div class="table-responsive">
+                        <table id="" class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="table-success">
+                                <th>Home Room</th>
+                                <th>First Name</th>
+                                <th>Father Name</th>
+                                <th>Attended Date</th>
+                                <th>Phone</th>
+                                <th>Role</th>
+                                <th>Profile Picture</th>
+                                <th>QR Code</th>
+                            </tr>
+                        </thead>   
+                        <tbody>
+                          {% for attendance in attendance_list %}
+                            {% if 'Principal' in attendance.attended_user.user_type %}
+                            <tr> 
+                              <td> 
+                                {% for registered_by in attendance.registered_by.all %}
+                                    {{ registered_by.firstname }}
+                                {% endfor %}
+                              </td>
+                            <td>{{ attendance.attended_user.firstname }}</td>
+                            <td>{{ attendance.attended_user.fathername}}</td>
+                            <td>{{ attendance.attended_date }}</td>
+                                <td>{{attendance.attended_user.phone}}  </td>
+                                <td>{{attendance.attended_user.user_type}}</td>
+                                <td ><img src="{{attendance.attended_user.profile_image.url }}"  height="300" width="300"></td>
+                                <td ><img src="{{ attendance.attended_user.qr_code.url }}"  height="300" width="300"></td>  
+                            </tr> 
+                            {% endif %}
+                            {% empty %}
+                            <tr>
+                              <span>No Recored Found</span>
+                            </tr>
+                          {% endfor %} 
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Teacher -->
+                <div class="card-body">
+                  <p>Teachers</p>
+                  <div class="table-responsive">
+                      <table id="" class="table table-bordered table-hover">
+                      <thead>
+                          <tr class="table-success">
+                              <th>Home Room</th>
+                              <th>First Name</th>
+                              <th>Father Name</th>
+                              <th>Attended Date</th>  
+                              <th>Phone</th>
+                              <th>Role</th>
+                              <th>Profile Picture</th>
+                              <th>QR Code</th>
+                          </tr>
+                      </thead>   
+                      <tbody>
+                        {% for attendance in attendance_list %}
+                          {% if 'Teacher' in attendance.attended_user.user_type %}
+                          <tr> 
+                            <td> 
+                              {% for registered_by in attendance.registered_by.all %}
+                                  {{ registered_by.firstname }}
+                              {% endfor %}
+                            </td>
+                          <td>{{ attendance.attended_user.firstname }}</td>
+                          <td>{{ attendance.attended_user.fathername}}</td>
+                          <td>{{ attendance.attended_date }}</td>
+                              <td>{{attendance.attended_user.phone}}  </td>
+                              <td>{{attendance.attended_user.user_type}}</td>
+                              <td ><img src="{{attendance.attended_user.profile_image.url }}"  height="300" width="300"></td>
+                              <td ><img src="{{ attendance.attended_user.qr_code.url }}"  height="300" width="300"></td>  
+                          </tr> 
+                          {% endif %}
+                          {% empty %}
+                          <tr>
+                            <span>No Recored Found</span>
+                          </tr>
+                        {% endfor %} 
+                      </tbody>
+                      </table>
+                  </div>
+              </div>
+              <!-- Student -->
+              <div class="card-body">
+                <p>Students Attendance List</p>
+                <div class="table-responsive">
+                    <table id="" class="table table-bordered table-hover">
+                    <thead>
+                        <tr class="table-success">
+                            <th>Home Room</th>
+                            <th>First Name</th>
+                            <th>Father Name</th>
+                            <th>Attended Date</th>  
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Grade</th>
+                            <th>Profile Picture</th>
+                            <th>QR Code</th>
+                        </tr>
+                    </thead>   
+                    <tbody>
+                      {% for attendance in attendance_list %}
+                        {% if 'Student' in attendance.attended_user.user_type %}
+                        <tr> 
+                          <td> 
+                            {% for registered_by in attendance.registered_by.all %}
+                                {{ registered_by.firstname }}
+                            {% endfor %}
+                          </td>
+                        <td>{{ attendance.attended_user.firstname }}</td>
+                        <td>{{ attendance.attended_user.fathername}}</td>
+                        <td>{{ attendance.attended_date }}</td>
+                            <td>{{attendance.attended_user.phone}}  </td>
+                            <td>{{attendance.attended_user.user_type}}</td>
+                            <td>{{attendance.attended_user.grade}}</td>
+                            <td ><img src="{{attendance.attended_user.profile_image.url }}"  height="300" width="300"></td>
+                            <td ><img src="{{ attendance.attended_user.qr_code.url }}"  height="300" width="300"></td>  
+                        </tr> 
+                        {% endif %}
+                        {% empty %}
+                        <tr>
+                          <span>No Recored Found</span>
+                        </tr>
+                      {% endfor %} 
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'accounts/js/app.js' %}"></script>
+  <!-- Ajax jQuery fetching data -->
+  <script>
+    $(document).ready(function() {
+     
+      $.ajax({
+        url: '{% url "attendance:chart" %}',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+         
+          new Chart(document.getElementById("chartjs-pie"), {
+            type: "pie",
+            data: {
+              labels: ["Principals", "Teachers", "Students", "Other"],
+              datasets: [{
+                data: [data.num_of_principals, data.num_of_teachers, data.num_of_students, ],
+                backgroundColor: [
+                  window.theme.primary,
+                  window.theme.warning,
+                  window.theme.danger,
+                  "#dee2e6"
+                ],
+                borderColor: "transparent"
+              }]
+            },
+            options: {
+              maintainAspectRatio: false,
+              legend: {
+                display: false
+              }
+            }
+          });
+          //Doughnut Chart
+          var ctx = document.getElementById("chartjs-doughnut").getContext("2d");
+          var chart = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+              labels: ["Principals", "Teachers", "Students", "Other"],
+              datasets: [{
+                data: [data.num_of_principals, data.num_of_teachers, data.num_of_students, ],
+                backgroundColor: [
+                  window.theme.primary,
+                  window.theme.success,
+                  window.theme.warning,
+                  "#dee2e6"
+                ],
+                borderColor: "transparent"
+              }]
+            },
+            options: {
+              maintainAspectRatio: false,
+              cutoutPercentage: 65,
+              legend: {
+                display: false
+              }
+            }
+          });
+          //Line 
+          new Chart(document.getElementById("chartjs-line"), {
+            type: "line",
+            data: {
+              labels: ["Principals", "Teachers", "Students", "Others"],
+              datasets: [{
+                label: "Count",
+                fill: true,
+                backgroundColor: "transparent",
+                borderColor: window.theme.primary,
+                data: [data.num_of_principals, data.num_of_teachers, data.num_of_students, ],
+              },  ]
+            },
+            options: {
+              maintainAspectRatio: false,
+              legend: {
+                display: false
+              },
+              tooltips: {
+                intersect: false
+              },
+              hover: {
+                intersect: true
+              },
+              plugins: {
+                filler: {
+                  propagate: false
+                }
+              },
+              scales: {
+                xAxes: [{
+                  reverse: true,
+                  gridLines: {
+                    color: "rgba(0,0,0,0.05)"
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    stepSize: 500
+                  },
+                  display: true,
+                  borderDash: [5, 5],
+                  gridLines: {
+                    color: "rgba(0,0,0,0)",
+                    fontColor: "#fff"
+                  }
+                }]
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
+  
+{% endblock %}

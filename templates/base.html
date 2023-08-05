@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'accounts/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/materialdesignicons.min.css' %}">
+    <script src="{% static 'accounts/js/jquery-3.2.1.min.js' %}"></script>
+  </head>
+<body>
+  <div class="container-scroller">
+    {% block login %} {% endblock %}
+    {% if user.is_authenticated %}
+        {% with userprofile=user.userprofile %}
+        {% block list %} {% endblock %}
+        {% block registration %} {% endblock %}
+        {% block qreader %}{% endblock%}
+        {% block principal_list %}{% endblock%}
+        {% block principal_edit %}{% endblock%}
+        {% block confirm_principal_delete %} {% endblock %}
+        {% block confirm_teacher_delete %} {% endblock %}
+        {% block confirm_student_delete %} {% endblock %}
+    {% endwith %}
+{% else %}
+    <p>You need to log in to view this page.</p>
+{% endif %}
+  </div>
+
+<script src="{% static 'accounts/js/vendor.bundle.base.js' %}"></script>
+<!-- <script src="{% static 'accounts/js/hoverable-collapse.js' %}"></script> -->
+<script src="{% static 'accounts/js/jsQR.js' %}"></script>
+</body>
+</html>
+

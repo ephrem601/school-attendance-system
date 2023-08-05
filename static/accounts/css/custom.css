@@ -1,0 +1,11 @@
+.form-group {
+  margin-bottom: 10px;
+}
+.form-control {
+  padding: 5px 10px;
+  height: 100%;
+}
+.login-form{
+    height: 500px;
+}
+ 

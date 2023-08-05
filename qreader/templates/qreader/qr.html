@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+{% block qreader %}
+{% include "navbar.html" %} 
+    <style>
+        #result{ 
+          margin-left:500px;
+          margin-top: 110px;
+        }
+        #canvas {
+          position: absolute;
+          top: 1px;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          z-index: -1;
+          display:block;
+          margin: auto;
+        }
+        #video {
+          position: absolute;
+          top: 1px;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          z-index: -1;
+          display:block;
+          margin: auto;
+           
+        }
+        
+          
+        </style>
+<div class="container-scroller">
+    {% include "navbar.html" %}
+  <div class="container-fluid page-body-wrapper">
+      {% include "sidebar.html" %}
+    <div class="row">
+<!-- Modal   -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5  class="modal-title" id="exampleModalLabel">QR Code Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p id="qr-code-result"></p>
+                <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+                    <div id="profile-image"></div>
+                    <div id="name"></div>
+                    <div id="position"></div>
+                    <div id="reg-date"></div>
+                    <div id="username"></div>
+                    <div id="phone"></div>   
+                </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+<!-- End of Model  -->
+        
+          <form method="post" enctype="multipart/form-data" action="{% url 'qreader:qr-data' %}" id="qr-form">
+              {% csrf_token %}
+              <video id="video" width="500" height="400" autoplay></video>
+              <canvas id="canvas" width="500" height="400"></canvas>
+          </form>
+    </div>
+  </div>
+</div>
+<!-- Javascript Code -->
+<script>
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const resultDiv = document.getElementById('result');
+
+  function sendQRCodeData(qrData) {
+    // Get the CSRF token from the HTML
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Use jQuery to make an AJAX request to the Django view
+    $.ajax({
+      url: "{% url 'qreader:qr-data' %}",
+      method: "POST",
+      headers: { "X-CSRFToken": csrftoken },
+      data: {
+        qr_data: qrData,
+      },
+      dataType: 'json',
+      success: function(data) {
+          //$('#exampleModal').modal('show');
+          $('#profile-image').html('<span><img class="rounded-circle" src="' + data.profile_image + '" height="150" width="150"></span><span><img src="' + data.qr_code + '" height="150" width="150"></span>'+'<hr>');
+          $('#name').html('<span class="text text-info">Name: </span>'+'<span class="text text-warning">'+data.firstname+' '+data.fathername+'</span>');
+          $('#position').html('<span class="text text-info">Position: </span>'+'<span class="text text-warning">'  +data.user_type+'</span>');
+          $('#reg-date').html('<span class="text text-info">Registration: Date - </span>'+'<span class="text text-warning">'+data.timestamp+' </span> ');
+          $('#username').html('<span class="text text-info">Username: </span>'+'<span class="text text-warning">'+data.username+'</span>');
+          $('#phone').html('<span class="text text-info">Phone: </span>'+'<span class="text text-warning">'+data.phone+'</span>');
+          $('.spinner-border').hide();
+            
+      },
+      error: function() {
+        console.log("AJAX request failed");
+      }
+    });
+  }
+
+  function scanQRCode() {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(imageData.data, imageData.width, imageData.height);
+    if (code) {
+      //resultDiv.textContent = "QR code detected and decoded: " + code.data;
+      // Display the QR code data in the modal body
+      $('#exampleModal').modal('show');
+       
+      sendQRCodeData(code.data);  // Send the QR code data to the Django view
+    } else {
+      //resultDiv.textContent = "Scanning for QR code...";
+      $('#result').text("Scanning for QR code..."); 
+      setTimeout(scanQRCode, 100);
+
+    }
+  }
+
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function(stream) {
+      video.srcObject = stream;
+      video.play();
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
+
+  video.addEventListener('play', function() {
+    setInterval(scanQRCode, 100);
+  });
+</script>
+{% endblock %}     
+     

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+<h1>Hello Students</h1>
+{% block list %}
+  <div class="container-scroller">
+    {% include "navbar.html" %}
+    <div class="container-fluid page-body-wrapper">
+      {% include "sidebar.html" %}
+      <div class="row">
+        <div class="col-md-12 stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="text text-secondary"><li> Name: {{user.userprofile.firstname}} {{user.userprofile.fathername}}</li></h5>
+                  <h5 class="text text-secondary"><li> Role: {{user.userprofile.user_type}}</li></h5>
+                  {% if 'Student' in userprofile.user_type %}
+                  <h5 class="text text-secondary"><li> Grade: {{user.userprofile.grade}}</li></h5>
+                  {% endif %}
+                  {% if 'Teacher' in userprofile.user_type %}
+                  <h5 class="text text-secondary"><li> Home Room: {{user.userprofile.home_room}}</li></h5>
+                  {% endif %}
+                  <h5 class="text text-secondary"><li> Phone: {{user.userprofile.phone}}</li></h5>
+                  <h5 class="text text-secondary"><li> Email: {{user.userprofile.email}}</li></h5>
+ 
+              <p class="card-title mt-5">Students Profile List</p>
+              <a href="#" class="btn btn-secondary mb-4">Print</a>
+              <a href="#" class="btn btn-success mb-4">Export</a>
+              <div class="table-responsive">
+                <table id="" class="table table-bordered table-hover">
+                  <thead>
+                    <tr class="table-success">
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Father's Name</th>
+                        <th>Phone</th>
+                        <th>Grade</th>
+                        <th>Role</th>
+                        <th>Profile</th>
+                        <th>QR Code</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for student in student_list %}
+                    {% if user.userprofile.home_room in student.grade %}
+                    <tr>
+                      <td>{{ student.user.username }}</td>
+                      <td>{{ student.firstname }}</td>
+                        <td>{{ student.fathername }} </td>
+                        <td>{{ student.phone }} </td>
+                        <td>{{ student.grade }}</td>
+                        <td>{{ student.user_type}}</td>
+                        <td ><img src="{{ student.profile_image.url }}"  height="300" width="300"></td>
+                        <td >
+                          <a href="{{ student.qr_code.url }}">
+                            <img src="{{ student.qr_code.url }}"  height="300" width="300">
+                          </a>
+                        </td>  
+                        <td>
+                          <a  href="http://127.0.0.1:8000/attendance/student/edit/{{ student.pk }}/" 
+                              class="btn btn-light text-light" 
+                              style="background-color: #21D192">Edit
+                          </a>
+                        <td>
+                          <a  href="http://127.0.0.1:8000/attendance/student/delete/{{ student.pk }}/" 
+                            class="btn btn-light text-light" 
+                            style="background-color: #d61b1b">Delete
+                          </a>
+                      </td>
+                    </tr>
+                     
+                    {% endif %}
+                    {% endfor %} 
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ul>
+    </div>
+  </div>
+{% endblock %}

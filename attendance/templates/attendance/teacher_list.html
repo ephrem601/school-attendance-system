@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block list %}
+{% if user.is_authenticated %}
+  {% if user.userprofile %}
+  <div class="container-scroller">
+    {% include "navbar.html" %}
+    <div class="container-fluid page-body-wrapper">
+      {% include "sidebar.html" %}
+      <div class="row">
+        <div class="col-md-12 stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="text text-secondary"><li> Name: {{user.userprofile.firstname}} {{user.userprofile.fathername}}</li></h5>
+                  <h5 class="text text-secondary"><li> Role: {{user.userprofile.user_type}}</li></h5>
+                  {% if 'Student' in userprofile.user_type %}
+                  <h5 class="text text-secondary"><li> Grade: {{user.userprofile.grade}}</li></h5>
+                  {% endif %}
+                  {% if 'Teacher' in userprofile.user_type %}
+                  <h5 class="text text-secondary"><li> Home Room: {{user.userprofile.home_room}}</li></h5>
+                  {% endif %}
+                  <h5 class="text text-secondary"><li> Phone: {{user.userprofile.phone}}</li></h5>
+                  <h5 class="text text-secondary"><li> Email: {{user.userprofile.email}}</li></h5>
+ 
+              <p class="card-title mt-5">Teachers Profile List</p>
+              <a href="#" class="btn btn-secondary mb-4">Print</a>
+              <a href="#" class="btn btn-success mb-4">Export</a>
+              
+              <div class="table-responsive">
+                <table id="" class="table table-bordered table-hover">
+                  <thead>
+                    <tr class="table-success">
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Father's Name</th>
+                        <th>Phone</th>
+                        <th>Home Room</th>
+                        <th>Role</th>
+                        <th>Profile</th>
+                        <th>QR Code</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for teacher in teacher_list %}
+                    <tr>
+                      <td>{{ teacher.user.username }}</td>
+                      <td>{{ teacher.firstname }}</td>
+                        <td>{{ teacher.fathername }} </td>
+                        <td>{{ teacher.phone }} </td>
+                        <td>{{teacher.home_room}}</td>
+                        <td>{{ teacher.user_type}} </td>
+                        <td ><img src="{{teacher.profile_image.url }}"  height="300" width="300"></td>
+                        <td >
+                          <a href="{{ teacher.qr_code.url }}">
+                            <img src="{{ teacher.qr_code.url }}"  height="300" width="300">
+                          </a>
+                        </td>  
+                        <td>
+                           
+                            <a  href="http://127.0.0.1:8000/attendance/teacher/edit/{{ teacher.pk }}/" 
+                                class="btn btn-light text-light" 
+                                style="background-color: #21D192">Edit
+                            </a>
+                          <td>
+                            <a  href="http://127.0.0.1:8000/attendance/teacher/delete/{{ teacher.pk }}/" 
+                              class="btn btn-light text-light" 
+                              style="background-color: #d61b1b">Delete
+                            </a>
+                           
+                        </td>  
+                    </tr> 
+                    {% empty %}
+                    <tr>
+                      <td colspan="9">No Teacher Found</td>
+                    </tr>
+                    {% endfor %} 
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% else %}
+    <p>You need to log in to view this page.</p>
+{% endif %}
+{% endblock %}
